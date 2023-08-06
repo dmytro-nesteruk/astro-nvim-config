@@ -63,15 +63,100 @@ return {
   --   end,
   -- },
   -- By adding to the which-key config and using our helper function you can add more which-key registered bindings
-  -- {
-  --   "folke/which-key.nvim",
-  --   config = function(plugin, opts)
-  --     require "plugins.configs.which-key"(plugin, opts) -- include the default astronvim config that calls the setup call
-  --     -- Add bindings which show up as group name
-  --     local wk = require "which-key"
-  --     wk.register({
-  --       b = { name = "Buffer" },
-  --     }, { mode = "n", prefix = "<leader>" })
-  --   end,
-  -- },
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    config = function()
+      require("noice").setup {
+        lsp = {
+          -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+          hover = {
+            enabled = false,
+          },
+          signature = {
+            enabled = false,
+          },
+
+          override = {
+            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+            ["vim.lsp.util.stylize_markdown"] = true,
+            ["cmp.entry.get_documentation"] = true,
+          },
+        },
+        -- you can enable a preset for easier configuration
+        presets = {
+          bottom_search = false, -- use a classic bottom cmdline for search
+          command_palette = true, -- position the cmdline and popupmenu together
+          long_message_to_split = true, -- long messages will be sent to a split
+          inc_rename = false, -- enables an input dialog for inc-rename.nvim
+          lsp_doc_border = false, -- add a border to hover docs and signature help
+        },
+      }
+    end,
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+    },
+  },
+  {
+    "folke/which-key.nvim",
+    config = function(plugin, opts)
+      require "plugins.configs.which-key"(plugin, opts) -- include the default astronvim config that calls the setup call
+      local wk = require "which-key"
+
+      vim.o.timeout = true
+      vim.o.timeoutlen = 50
+
+      wk.register({
+        b = { name = "Buffer" },
+      }, { mode = "n", prefix = "<leader>" })
+    end,
+  },
+  {
+    "ThePrimeagen/refactoring.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function(...) require("refactoring").setup(...) end,
+  },
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = {
+      "nvim-lua/popup.nvim",
+      "nvim-lua/plenary.nvim",
+    },
+    opts = function(_, opts)
+      local actions = require "telescope.actions"
+      return require("astronvim.utils").extend_tbl(opts, {
+        extensions = {},
+        pickers = {
+          find_files = {
+            -- dot file
+            hidden = true,
+          },
+          buffers = {
+            path_display = { "smart" },
+            mappings = {
+              i = { ["<c-d>"] = actions.delete_buffer },
+              n = { ["d"] = actions.delete_buffer },
+            },
+          },
+        },
+      })
+    end,
+    config = function(...)
+      require "plugins.configs.telescope"(...)
+      local telescope = require "telescope"
+      telescope.load_extension "refactoring"
+      if not vim.g.neovide then telescope.load_extension "noice" end
+    end,
+  },
 }
