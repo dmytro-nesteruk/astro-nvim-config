@@ -2,6 +2,13 @@ return {
   {
     "folke/tokyonight.nvim",
     lazy = false,
+    config = function()
+      require("tokyonight").setup({
+        style = "storm",
+        transparent = false,
+        dim_inactive = true
+      })
+    end
   },
 
   {
@@ -9,7 +16,7 @@ return {
     lazy = false,
     config = function()
       require("kanagawa").setup {
-        transparent = true,
+        transparent = false,
         dimInactive = true,
       }
     end,

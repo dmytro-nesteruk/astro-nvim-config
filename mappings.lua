@@ -20,6 +20,20 @@ return {
       desc = "Previous buffer",
     },
 
+    ["<leader>2"] = {
+      function() require("astronvim.utils.buffer").nav(vim.v.count > 0 and vim.v.count or 1) end,
+      desc = "Next buffer",
+    },
+    ["<leader>1"] = {
+      function() require("astronvim.utils.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1)) end,
+      desc = "Previous buffer",
+    },
+
+    ["<leader>s"] = {
+      ":noautocmd w<CR>",
+      desc = "Save without formating",
+    },
+
     ["<leader>bD"] = {
       function()
         require("astronvim.utils.status").heirline.buffer_picker(
@@ -38,7 +52,7 @@ return {
       desc = "Move focus to right window",
     },
     ["<S-j>"] = { ":m '>+1<CR>gv=gv" },
-    ["<S-j>"] = { ":m '<-2<CR>gv=gv" },
+    ["<S-k>"] = { ":m '<-2<CR>gv=gv" },
   },
   v = {
     ["<S-j>"] = { ":m .+1<CR>" },
