@@ -42,7 +42,7 @@ return {
         ["x"] = {
           e = { "<cmd>!npx eslint --fix %:p<CR>", "eslint --fix current file" },
           s = { "<cmd>!npx stylelint --fix %:p<CR>", "stylelint --fix current file" },
-          p = { "<cmd>!npx prettier %:p --write --config ./.prettierrc<CR>", "prettier --write current file" },
+          p = { '<cmd>!npx prettier "%:p" --write --config ./.prettierrc*?<CR>', "prettier --write current file" },
         },
       }, { mode = "n", prefix = "<leader>" })
     end,

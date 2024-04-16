@@ -36,6 +36,7 @@ return {
           "markdown",
           "css",
           "scss",
+          "vue",
         },
       },
       diagnostics.eslint.with {
@@ -56,6 +57,8 @@ return {
           "sass",
           "postcss",
           "svelte",
+          "vue",
+          "astro",
           -- "html",
         },
       },
